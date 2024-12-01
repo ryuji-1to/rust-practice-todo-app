@@ -3,7 +3,7 @@ use std::{
     sync::{Arc, RwLock, RwLockReadGuard, RwLockWriteGuard},
 };
 
-use anyhow::{Context, Ok};
+use anyhow::Context;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 

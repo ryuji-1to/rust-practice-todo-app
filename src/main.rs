@@ -117,6 +117,7 @@ mod test {
     async fn should_get_all_todos() {
         let expected = Todo::new(1, "should_get_all_todos".to_string());
         let repository = TodoRepositoryForMemory::new();
+        repository.create(CreateTodo::new("should_get_all_todos".to_string()));
         let req = build_todo_req_with_empty(Method::GET, "/todos");
         let res = create_app(repository).oneshot(req).await.unwrap();
         let bytes = hyper::body::to_bytes(res.into_body()).await.unwrap();
