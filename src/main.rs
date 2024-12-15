@@ -8,7 +8,7 @@ use axum::{
     Router,
 };
 use dotenv::dotenv;
-use handlers::{all_todo, create_todo, delete_todo, find_todo, update_todo};
+use handlers::todo::{all_todo, create_todo, delete_todo, find_todo, update_todo};
 use hyper::header::CONTENT_TYPE;
 use sqlx::PgPool;
 use std::net::SocketAddr;
