@@ -9,12 +9,11 @@ use serde::de::DeserializeOwned;
 use std::sync::Arc;
 use validator::Validate;
 
-use crate::repositories::{CreateTodo, TodoRepository, UpdateTodo};
+use crate::repositories::todo::{CreateTodo, TodoRepository, UpdateTodo};
 
 #[derive(Debug)]
 pub struct ValidatedJson<T>(T);
 
-// traitでは本来asyncは宣言できないので、async_traitマクロを使用
 #[async_trait]
 impl<T, B> FromRequest<B> for ValidatedJson<T>
 where

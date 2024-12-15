@@ -1,7 +1,7 @@
 mod handlers;
 mod repositories;
 
-use crate::repositories::{TodoRepository, TodoRepositoryForDb};
+use crate::repositories::todo::{TodoRepository, TodoRepositoryForDb};
 use axum::{
     extract::Extension,
     routing::{get, post},
@@ -20,7 +20,6 @@ async fn main() {
     // logging
     let log_level = env::var("RUST_LOG").unwrap_or("info".to_string());
     env::set_var("RUST_LOG", log_level);
-    // tracingの初期化をする
     tracing_subscriber::fmt::init();
     dotenv().ok();
     let database_url = &env::var("DATABASE_URL").expect("undefined [DATABASE_URL]");
@@ -31,7 +30,6 @@ async fn main() {
     let repository = TodoRepositoryForDb::new(pool.clone());
     // アプリケーションのルーティング設定を作成
     let app = create_app(repository);
-    // std::convert::Fromトレイとを実装しているため、fromメソッドが使える
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     tracing::debug!("listening on {}", addr);
     // 引数のアドレスをサーバーにバインド
@@ -56,7 +54,7 @@ fn create_app<T: TodoRepository>(repository: T) -> Router {
         // corsの設定
         .layer(
             CorsLayer::new()
-                .allow_origin(Origin::exact("http://localhost:3001".parse().unwrap()))
+                .allow_origin(Origin::exact("http://localhost:8000".parse().unwrap()))
                 .allow_methods(Any)
                 .allow_headers(vec![CONTENT_TYPE]),
         )
@@ -68,15 +66,14 @@ async fn root() -> &'static str {
 
 #[cfg(test)]
 mod test {
-    use std::vec;
-
     use super::*;
-    use crate::repositories::{test_utils::TodoRepositoryForMemory, CreateTodo, Todo};
+    use crate::repositories::todo::{test_utils::TodoRepositoryForMemory, CreateTodo, Todo};
     use axum::response::Response;
     use axum::{
         body::Body,
         http::{header, Method, Request, StatusCode},
     };
+    use std::vec;
     use tower::ServiceExt;
 
     fn build_todo_req_with_json(path: &str, method: Method, json_body: String) -> Request<Body> {
