@@ -49,6 +49,7 @@ impl LabelRepository for LabelRepositoryForDb {
         .bind(name.clone())
         .fetch_optional(&self.pool)
         .await?;
+        dbg!(&optional_label);
         if let Some(label) = optional_label {
             return Err(RepositoryError::Duplicate(label.id).into());
         }
@@ -104,7 +105,7 @@ mod test {
             .await
             .expect(&format!("fail connect database, url is [{}]", database_url));
         let repository = LabelRepositoryForDb::new(pool);
-        let label_text = "test_label";
+        let label_text = "test_label_crud";
 
         // create
         let label = repository
@@ -185,7 +186,7 @@ pub mod test_utils {
         use super::*;
 
         #[tokio::test]
-        async fn label_curd_scenario() {
+        async fn label_crud_scenario() {
             let name = "label text".to_string();
             let id = 1;
             let expected = Label::new(id, name.clone());
