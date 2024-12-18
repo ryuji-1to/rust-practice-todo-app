@@ -1,8 +1,3 @@
-use std::{
-    collections::HashMap,
-    sync::{Arc, RwLock, RwLockReadGuard, RwLockWriteGuard},
-};
-
 use super::RepositoryError;
 use axum::async_trait;
 use serde::{Deserialize, Serialize};
@@ -130,6 +125,10 @@ mod test {
 #[cfg(test)]
 pub mod test_utils {
     use super::*;
+    use std::{
+        collections::HashMap,
+        sync::{Arc, RwLock, RwLockReadGuard, RwLockWriteGuard},
+    };
 
     impl Label {
         pub fn new(id: i32, name: String) -> Self {
