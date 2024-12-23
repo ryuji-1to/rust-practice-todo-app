@@ -2,10 +2,11 @@ use super::{label::Label, RepositoryError};
 use axum::async_trait;
 use serde::{Deserialize, Serialize};
 use sqlx::{FromRow, PgPool};
+use std::marker::{Send, Sync};
 use validator::Validate;
 
 #[async_trait]
-pub trait TodoRepository: Clone + std::marker::Send + std::marker::Sync + 'static {
+pub trait TodoRepository: Clone + Send + Sync + 'static {
     async fn create(&self, payload: CreateTodo) -> anyhow::Result<TodoEntity>;
     async fn find(&self, id: i32) -> anyhow::Result<TodoEntity>;
     async fn all(&self) -> anyhow::Result<Vec<TodoEntity>>;

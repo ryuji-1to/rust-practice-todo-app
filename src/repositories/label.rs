@@ -2,9 +2,10 @@ use super::RepositoryError;
 use axum::async_trait;
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
+use std::marker::{Send, Sync};
 
 #[async_trait]
-pub trait LabelRepository: Clone + std::marker::Send + std::marker::Sync + 'static {
+pub trait LabelRepository: Clone + Send + Sync + 'static {
     async fn create(&self, name: String) -> anyhow::Result<Label>;
     async fn all(&self) -> anyhow::Result<Vec<Label>>;
     async fn delete(&self, id: i32) -> anyhow::Result<()>;

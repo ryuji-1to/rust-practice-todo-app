@@ -1,3 +1,6 @@
+pub mod label;
+pub mod todo;
+
 use axum::{
     async_trait,
     extract::{FromRequest, RequestParts},
@@ -6,9 +9,6 @@ use axum::{
 use hyper::StatusCode;
 use serde::de::DeserializeOwned;
 use validator::Validate;
-
-pub mod label;
-pub mod todo;
 
 #[derive(Debug)]
 pub struct ValidatedJson<T>(T);
