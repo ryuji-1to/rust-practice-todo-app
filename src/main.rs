@@ -36,11 +36,9 @@ async fn main() {
         .expect(&format!("fail connect database, url is {}", database_url));
     let todo_repository = TodoRepositoryForDb::new(pool.clone());
     let label_repository = LabelRepositoryForDb::new(pool.clone());
-    // アプリケーションのルーティング設定を作成
     let app = create_app(todo_repository, label_repository);
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     tracing::debug!("listening on {}", addr);
-    // 引数のアドレスをサーバーにバインド
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
@@ -68,7 +66,6 @@ fn create_app<Todo: TodoRepository, Label: LabelRepository>(
         .route("/labels/:id", delete(delete_label::<Label>))
         .layer(Extension(Arc::new(todo_repository)))
         .layer(Extension(Arc::new(label_repository)))
-        // corsの設定
         .layer(
             CorsLayer::new()
                 .allow_origin(Origin::exact("http://localhost:8000".parse().unwrap()))
