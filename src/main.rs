@@ -24,7 +24,6 @@ use tower_http::cors::{Any, CorsLayer, Origin};
 
 #[tokio::main]
 async fn main() {
-    // logging
     let log_level = env::var("RUST_LOG").unwrap_or("info".to_string());
     env::set_var("RUST_LOG", log_level);
     tracing_subscriber::fmt::init();
@@ -58,7 +57,6 @@ fn create_app<Todo: TodoRepository, Label: LabelRepository>(
                 .delete(delete_todo::<Todo>)
                 .patch(update_todo::<Todo>),
         )
-        // リクエスト全体で共有するデータを提供
         .route(
             "/labels",
             post(create_label::<Label>).get(all_label::<Label>),

@@ -55,6 +55,5 @@ pub async fn delete_todo<T: TodoRepository>(
         .delete(id)
         .await
         .map(|_| StatusCode::NO_CONTENT)
-        // unwrapだとpanicになるのでunwrap_orを使用する
         .unwrap_or(StatusCode::NO_CONTENT)
 }
